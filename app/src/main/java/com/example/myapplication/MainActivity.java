@@ -3,6 +3,7 @@ package com.example.myapplication;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,12 +16,23 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    MQTTService mqttService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         LineDataSet dataSet = new LineDataSet(myValues, "This is sample chart"); // add entries to dataset
 
-
+        
         LineData lineData = new LineData(dataSet);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -57,6 +69,75 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        final TextView txt = (TextView)findViewById(R.id.txt);
+
+
+        mqttService = new MQTTService(this);
+        mqttService.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                Log.d("mqtt", "some thing done");
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                String data = message.toString();
+//                port.write(data.getBytes(),1000);
+
+                Log.w("Message Arrived: ",  data);
+                Log.d(topic, data);
+                txt.setText(data);
+//                System.out.print(topic + ": " + data);
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
+
+    }
+
+    public void handleTurnOnClick(View view) {
+        String message;
+        JSONObject json = new JSONObject();
+        try {
+            json.put("name1", "value1");
+            message = json.toString();
+            Log.w("json object", message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendDataMQTT(json.toString());
+    }
+
+
+
+    private void sendDataMQTT(@org.jetbrains.annotations.NotNull String data) {
+        MqttMessage message = new MqttMessage();
+        message.setId(1234);
+        message.setQos(0);
+        message.setRetained(true);
+
+        byte[] b = data.getBytes(Charset.forName("UTF-8"));
+
+
+
+        message.setPayload(b);
+        Log.d("ABC", "Publish" + message);
+
+        try {
+            mqttService.mqttAndroidClient.publish("_MyStic_/f/gas-tracker", message);
+
+        } catch (MqttException e) {
+            Log.w("mqtt" , "cannot send message");
+        }
 
     }
 
