@@ -17,11 +17,11 @@ import java.util.UUID;
 
 public class MQTTService {
 
-    final String serverURI = "tcp://io.adafruit.com:1883";
-    final String clientID   = UUID.randomUUID().toString();
-    final String subscriptionTopic = "_MyStic_/f/gas-tracker";
-    final String username = "_MyStic_";
-    final String password = "aio_hHuh89OFhKkcMVmSWCGLYPcRYFl0";
+    final String serverURI ="tcp://io.adafruit.com:1883";
+    final String clientID ="asdasdadsass";
+    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
+    final String username ="duyctin2000";
+    final String password ="aio_NuaB87Fnb9jtCmromFTPmBYLuDpW";
 
 
 

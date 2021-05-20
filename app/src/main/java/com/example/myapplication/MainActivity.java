@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -133,12 +135,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d("ABC", "Publish" + message);
 
         try {
-            mqttService.mqttAndroidClient.publish("_MyStic_/f/gas-tracker", message);
+            mqttService.mqttAndroidClient.publish("duyctin2000/feeds/gas-detection", message);
 
         } catch (MqttException e) {
             Log.w("mqtt" , "cannot send message");
         }
 
+    }
+
+    public void logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(),Login.class));
+        finish();
     }
 
 }

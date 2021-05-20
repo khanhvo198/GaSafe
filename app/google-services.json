@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "315804938961",
+    "project_id": "gasafe-ca657",
+    "storage_bucket": "gasafe-ca657.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315804938961:android:7ef60ca7c127e9820f4bf0",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315804938961-13bda02pji359gm4ib96071jdiib559g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5d9niduJXU_8rf9dkU7VBE_dpIRi22e4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315804938961-13bda02pji359gm4ib96071jdiib559g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
