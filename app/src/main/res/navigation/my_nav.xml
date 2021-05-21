@@ -7,12 +7,12 @@
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.example.myapplication.MainActivity"
+        android:name="com.example.myapplication.HomeFragment"
         android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+        tools:layout="@layout/home_fragment" />
     <fragment
         android:id="@+id/viewProfile"
-        android:name="com.example.myapplication.ViewProfile"
+        android:name="com.example.myapplication.ProfileFragment"
         android:label="fragment_view_profile"
-        tools:layout="@layout/fragment_view_profile" />
+        tools:layout="@layout/profile_fragment" />
 </navigation>

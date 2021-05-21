@@ -21,8 +21,7 @@ public class MQTTService {
     final String clientID ="asdasdsass";
     final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
     final String username ="duyctin2000";
-    final String password ="aio_DkzE918S3MVaiF2TvFftXQM8iL21";
-
+    final String password ="aio_aQin02myvFFSpNnioTB6T2kLUA0w";
 
 
     public MqttAndroidClient mqttAndroidClient;
