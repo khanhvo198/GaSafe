@@ -5,10 +5,15 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -22,7 +27,9 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
+import androidx.fragment.app.Fragment;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -30,18 +37,20 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Fragment {
 
 
     MQTTService mqttService;
+    View root;
+    Button btnTurnOnClick, btnLogout;
 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_main, container, false);
+        btnTurnOnClick = root.findViewById(R.id.button2);
+        btnLogout = root.findViewById(R.id.btnLogout);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        LineChart chart = (LineChart) findViewById(R.id.chart);
+        LineChart chart = (LineChart) root.findViewById(R.id.chart);
 
 
         ArrayList<Entry> myValues = new ArrayList<Entry>();
@@ -70,11 +79,10 @@ public class MainActivity extends AppCompatActivity {
         chart.invalidate();
 
 
+        final TextView txt = (TextView)root.findViewById(R.id.txt);
 
-        final TextView txt = (TextView)findViewById(R.id.txt);
 
-
-        mqttService = new MQTTService(this);
+        mqttService = new MQTTService(getContext());
         mqttService.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
@@ -103,22 +111,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnTurnOnClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message;
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("name1", "value1");
+                    message = json.toString();
+                    Log.w("json object", message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                sendDataMQTT(json.toString());
+            }
+        });
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(root.getContext(),Login.class));
+            }
+        });
+
+        return root;
+
     }
-
-    public void handleTurnOnClick(View view) {
-        String message;
-        JSONObject json = new JSONObject();
-        try {
-            json.put("name1", "value1");
-            message = json.toString();
-            Log.w("json object", message);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        sendDataMQTT(json.toString());
-    }
-
 
 
     private void sendDataMQTT(@org.jetbrains.annotations.NotNull String data) {
@@ -143,10 +163,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(),Login.class));
-        finish();
-    }
 
 }
