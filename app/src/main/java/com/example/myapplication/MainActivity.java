@@ -99,9 +99,20 @@ public class MainActivity extends Fragment {
                 String data = message.toString();
 //                port.write(data.getBytes(),1000);
 
-                Log.w("Message Arrived: ",  data);
-                Log.d(topic, data);
+//                Log.w("Message Arrived: ",  data);
+//                Log.d(topic, data);
                 txt.setText(data);
+
+                if (Integer.parseInt(data) > 15) {
+                    btnTurnOnClick.setText("TURN OFF");
+                    txt.setText("ON");
+                    sendDataMQTT("ON");
+                }
+                else {
+                    btnTurnOnClick.setText("TURN ON");
+                    txt.setText("OFF");
+                    sendDataMQTT("OFF");
+                }
 //                System.out.print(topic + ": " + data);
             }
 
@@ -114,17 +125,27 @@ public class MainActivity extends Fragment {
         btnTurnOnClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message;
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("name1", "value1");
-                    message = json.toString();
-                    Log.w("json object", message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+//                String message;
+//                JSONObject json = new JSONObject();
+//                try {
+//                    json.put("name1", "value1");
+//                    message = json.toString();
+//                    Log.w("json object", message);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                sendDataMQTT(json.toString());
+                if (btnTurnOnClick.getText().toString().equals("TURN ON")) {
+                    btnTurnOnClick.setText("TURN OFF");
+                    txt.setText("ON");
+                    sendDataMQTT("ON");
                 }
-
-                sendDataMQTT(json.toString());
+                else {
+                    btnTurnOnClick.setText("TURN ON");
+                    txt.setText("OFF");
+                    sendDataMQTT("OFF");
+                }
             }
         });
 

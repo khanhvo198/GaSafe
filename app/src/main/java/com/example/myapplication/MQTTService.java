@@ -18,10 +18,10 @@ import java.util.UUID;
 public class MQTTService {
 
     final String serverURI ="tcp://io.adafruit.com:1883";
-    final String clientID ="asdasdadsass";
+    final String clientID ="asdasdsass";
     final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
     final String username ="duyctin2000";
-    final String password ="aio_Dbbj99VwEyFDg3GjB5XEUMfbltfF";
+    final String password ="aio_DkzE918S3MVaiF2TvFftXQM8iL21";
 
 
 
@@ -43,6 +43,7 @@ public class MQTTService {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 Log.w("mqtt", message.toString());
+
             }
 
             @Override
