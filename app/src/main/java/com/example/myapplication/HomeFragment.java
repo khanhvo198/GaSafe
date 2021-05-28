@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
-
+import com.google.gson.Gson;
+import org.json.simple.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -85,24 +86,25 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                String data = message.toString();
+                String json = message.toString();
 //                port.write(data.getBytes(),1000);
 
 //                Log.w("Message Arrived: ",  data);
 //                Log.d(topic, data);
                 //txt.setText(data);
+                JsonObject obj = new JsonParser().parse(jsFile).getAsJsonObject();
+                String data = json.getString("");
 
                 if (Integer.parseInt(data) > 15) {
                     btnTurnOnClick.setText("TURN OFF");
                     txt.setText("Nòng Độ Gas: " + data + "%");
                     txt.setTextColor(root.getResources().getColor(R.color.colorRed));
-                    sendDataMQTT("ON");
+                    sendDataMQTT("{\"id\":\"3\",\"name\":\"SPEAKER\",\"data\":\"1000\",\"unit\":\"\"}");
                 }
                 else {
                     btnTurnOnClick.setText("TURN ON");
                     txt.setText("Nòng Độ Gas: " + data + "%");
                     txt.setTextColor(root.getResources().getColor(R.color.colorGreen));
-                    sendDataMQTT("OFF");
                 }
 //                System.out.print(topic + ": " + data);
             }
