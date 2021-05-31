@@ -19,9 +19,26 @@ public class MQTTService {
 
     final String serverURI ="tcp://io.adafruit.com:1883";
     final String clientID ="asdasdsass";
-    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
-    final String username ="duyctin2000";
-    final String password ="aio_aQin02myvFFSpNnioTB6T2kLUA0w";
+//    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
+//    final String username_BBC = "CSE_BBC";
+//    final String username_BBC1 = "CSE_BBC";
+//    final String password  = "CSE@2021";
+
+
+    final String username = "_MyStic_";
+    final String password = "aio_mIEU65n3PYMldvC0mMJ8EpSDvc86";
+
+
+    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
+    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
+    final String buzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
+
+
+
+
+//    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
+//    final String DRVTopic = "_MyStic_/feeds/turn-on-fan";
+//    final String buzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
 
 
     public MqttAndroidClient mqttAndroidClient;
@@ -50,7 +67,9 @@ public class MQTTService {
 
             }
         });
-        connect();
+        connect(username, password, turnOnFanTopic);
+//        connect(username, password,buzzerTopic);
+        connect(username, password,gasDetectionTopic);
     }
 
     public void setCallback(MqttCallbackExtended callback) {
@@ -58,7 +77,7 @@ public class MQTTService {
     }
 
 
-    private void connect() {
+    private void connect(String username, String password, String subscriptionTopic) {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
         mqttConnectOptions.setCleanSession(false);
@@ -75,7 +94,7 @@ public class MQTTService {
                     disconnectedBufferOptions.setPersistBuffer(false);
                     disconnectedBufferOptions.setDeleteOldestMessages(false);
                     mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                    subscriptionTopic();
+                    subscriptionTopic(subscriptionTopic); // Subscription Topic
                 }
 
                 @Override
@@ -91,7 +110,7 @@ public class MQTTService {
     }
 
 
-    private void subscriptionTopic() {
+    private void subscriptionTopic(String subscriptionTopic) {
         try {
             mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
                 @Override

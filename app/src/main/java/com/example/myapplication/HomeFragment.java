@@ -31,6 +31,15 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
+    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
+    final String turnOnFanTopic = "_MyStic_/feeds/turn-on-fan";
+
+//    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
+//    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
+
+
+
+
 
     MQTTService mqttService;
     View root;
@@ -66,9 +75,13 @@ public class HomeFragment extends Fragment {
 //        dataSet.setFillColor(ContextCompat.getColor(context,R.color.green));
 
         chart.setData(lineData);
-
         chart.invalidate();
 
+
+
+
+
+        //----------------------------------------------------------------------//
 
         final TextView txt = (TextView)root.findViewById(R.id.txt);
 
@@ -77,7 +90,7 @@ public class HomeFragment extends Fragment {
         mqttService.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
-                Log.d("mqtt", "some thing done");
+                Log.d("mqtt", "Connect Complete");
             }
 
             @Override
@@ -87,41 +100,20 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                String data = message.toString();
-//                port.write(data.getBytes(),1000);
 
-//                Log.w("Message Arrived: ",  data);
-//                Log.d(topic, data);
-                //txt.setText(data);
+                JSONObject data = new JSONObject(new String(message.getPayload()));
 
                 switch (topic) {
-                    case "": {
-                        System.out.printf("asdasd");
+                    case gasDetectionTopic: {
+                        processGasTracker((String) data.get("data"));
                         break;
                     }
-                    case "a": {
-                        break;
-                    }
-                    case "b": {
-                        System.out.printf("asdakjndkjadkas");
+
+                    default: {
                         break;
                     }
                 }
 
-
-                if (Integer.parseInt(data) > 15) {
-                    btnTurnOnClick.setText("TURN OFF");
-                    txt.setText("Nòng Độ Gas: " + data + "%");
-                    txt.setTextColor(root.getResources().getColor(R.color.colorRed));
-                    sendDataMQTT("ON");
-                }
-                else {
-                    btnTurnOnClick.setText("TURN ON");
-                    txt.setText("Nòng Độ Gas: " + data + "%");
-                    txt.setTextColor(root.getResources().getColor(R.color.colorGreen));
-                    sendDataMQTT("OFF");
-                }
-//                System.out.print(topic + ": " + data);
             }
 
             @Override
@@ -133,26 +125,15 @@ public class HomeFragment extends Fragment {
         btnTurnOnClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String message;
-//                JSONObject json = new JSONObject();
-//                try {
-//                    json.put("name1", "value1");
-//                    message = json.toString();
-//                    Log.w("json object", message);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                sendDataMQTT(json.toString());
                 if (btnTurnOnClick.getText().toString().equals("TURN ON")) {
                     btnTurnOnClick.setText("TURN OFF");
-                    txt.setText("ON");
-                    sendDataMQTT("ON");
+//                    txt.setText("Fan is turn off");
+                    sendDataMQTT(createTurnOnFanJSON("1").toString(), turnOnFanTopic);
                 }
                 else {
                     btnTurnOnClick.setText("TURN ON");
-                    txt.setText("OFF");
-                    sendDataMQTT("OFF");
+//                    txt.setText("Fan is turn on");
+                    sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
                 }
             }
         });
@@ -162,7 +143,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void sendDataMQTT(@org.jetbrains.annotations.NotNull String data) {
+    private void sendDataMQTT(@org.jetbrains.annotations.NotNull String data, String topic) {
         MqttMessage message = new MqttMessage();
         message.setId(1234);
         message.setQos(0);
@@ -176,7 +157,7 @@ public class HomeFragment extends Fragment {
         Log.d("ABC", "Publish" + message);
 
         try {
-            mqttService.mqttAndroidClient.publish("duyctin2000/feeds/gas-detection", message);
+            mqttService.mqttAndroidClient.publish(topic, message);
 
         } catch (MqttException e) {
             Log.w("mqtt" , "cannot send message");
@@ -185,7 +166,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private String createJSON(String id, String name, String data, String unit) {
+    private JSONObject createJSON(String id, String name, String data, String unit) {
         JSONObject json = new JSONObject();
         try {
             json.put("id", id);
@@ -195,7 +176,31 @@ public class HomeFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return json.toString();
+        return json;
+    }
+
+
+    private JSONObject createTurnOnFanJSON(String data) {
+        return createJSON("11", "RELAY", data, "");
+    }
+
+
+
+    private void processGasTracker(String data) {
+        final TextView txt = (TextView)root.findViewById(R.id.txt);
+
+        if(Integer.parseInt(data)  == 0) {
+            btnTurnOnClick.setText("TURN OFF");
+            txt.setTextColor(root.getResources().getColor(R.color.colorGreen));
+            txt.setText("Nồng độ bình thường");
+            sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
+        }
+        else {
+            btnTurnOnClick.setText("TURN ON");
+            txt.setTextColor(root.getResources().getColor(R.color.colorRed));
+            txt.setText("Nồng độ vượt ngưỡng");
+            sendDataMQTT(createTurnOnFanJSON("1").toString(), turnOnFanTopic);
+        }
     }
 
 
