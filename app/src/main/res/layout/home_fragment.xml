@@ -20,7 +20,7 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/button2_background_color"
         android:drawableTop="@drawable/ic_fan"
         android:radius="20dp"
         android:text="TURN ON"
