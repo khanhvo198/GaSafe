@@ -21,6 +21,8 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import androidx.fragment.app.Fragment;
 
@@ -91,6 +93,21 @@ public class HomeFragment extends Fragment {
 //                Log.w("Message Arrived: ",  data);
 //                Log.d(topic, data);
                 //txt.setText(data);
+
+                switch (topic) {
+                    case "": {
+                        System.out.printf("asdasd");
+                        break;
+                    }
+                    case "a": {
+                        break;
+                    }
+                    case "b": {
+                        System.out.printf("asdakjndkjadkas");
+                        break;
+                    }
+                }
+
 
                 if (Integer.parseInt(data) > 15) {
                     btnTurnOnClick.setText("TURN OFF");
@@ -166,6 +183,22 @@ public class HomeFragment extends Fragment {
         }
 
     }
+
+
+    private String createJSON(String id, String name, String data, String unit) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("name",name);
+            json.put("data",data);
+            json.put("unit",unit);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json.toString();
+    }
+
+
 
 
 }
