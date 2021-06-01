@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.home_fragment, container, false);
-        btnTurnOnClick = root.findViewById(R.id.button2);
+        btnTurnOnClick = root.findViewById(R.id.btnFanController);
 
         LineChart chart = (LineChart) root.findViewById(R.id.chart);
 

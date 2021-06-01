@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnFanController"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_button_shape"
@@ -25,14 +25,14 @@
         android:drawableTop="@drawable/ic_fan"
         android:text="TURN ON"
         android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/button5"
+        app:layout_constraintBottom_toTopOf="@+id/btnCallFireFighter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chart"
         app:layout_constraintVertical_bias="0.7" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnMaintainSystem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/button3_background_color"
@@ -41,14 +41,14 @@
 
         android:text="MAINTAIN SYSTEM"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/btnFanController"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chart"
         app:layout_constraintVertical_bias="0.433" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btnContactSupport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_button_shape"
@@ -57,13 +57,13 @@
         android:text="CONTACT SUPPORT"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="@+id/btnFanController"
 
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintStart_toStartOf="@+id/btnFanController"
+        app:layout_constraintTop_toBottomOf="@+id/btnMaintainSystem" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btnCallFireFighter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_button_shape"
@@ -75,25 +75,25 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintHorizontal_bias="0.058"
-        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintStart_toEndOf="@+id/btnFanController"
         app:layout_constraintTop_toBottomOf="@+id/chart"
         app:layout_constraintVertical_bias="0.432" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/btnChartViewDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Day"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/chart"
-        app:layout_constraintEnd_toStartOf="@+id/button7"
+        app:layout_constraintEnd_toStartOf="@+id/btnChartViewWeek"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.318" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/btnChartViewWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Week"
@@ -106,14 +106,14 @@
         app:layout_constraintVertical_bias="0.318" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/btnChartViewMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Month"
         app:layout_constraintBottom_toTopOf="@+id/chart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toEndOf="@+id/button7"
+        app:layout_constraintStart_toEndOf="@+id/btnChartViewWeek"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.318" />
 
@@ -128,7 +128,7 @@
         app:layout_constraintBottom_toTopOf="@+id/chart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button7" />
+        app:layout_constraintTop_toBottomOf="@+id/btnChartViewWeek" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
