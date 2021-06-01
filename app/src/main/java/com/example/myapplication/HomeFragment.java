@@ -34,8 +34,8 @@ public class HomeFragment extends Fragment {
     final String clientID ="asdasdsass";
     final String username_BBC = "CSE_BBC";
     final String username_BBC1 = "CSE_BBC1";
-    final String password_BBC  = "aio_YWqQ75LLnzE66cGrbMWNhCka1Xhb";
-    final String password_BBC1 = "aio_byWm36bA6XUDSqPfCfVboXjt3Uf1";
+    final String password_BBC  = "";
+    final String password_BBC1 = "";
 
 
 
@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment {
 
     final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
     final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
+    final String tempHumidTopic = "CSE_BBC/feeds/bk-iot-temp-humid";
 
 
 
@@ -110,6 +111,7 @@ public class HomeFragment extends Fragment {
                 Log.d("mqttBBC", "Connect Complete");
                 try {
                     mqttServiceBBC.mqttAndroidClient.subscribe(turnOnFanTopic,0);
+//                    mqttServiceBBC.mqttAndroidClient.subscribe(tempHumidTopic, 0);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -123,7 +125,18 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
+                JSONObject data = new JSONObject(new String(message.getPayload()));
 
+                switch (topic) {
+                    case tempHumidTopic: {
+                        Log.d("Temp-humid data:" , (String) data.get("data"));
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                }
             }
 
             @Override

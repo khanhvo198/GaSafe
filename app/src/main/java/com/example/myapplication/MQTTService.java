@@ -22,12 +22,12 @@ public class MQTTService {
 //    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
     final String username_BBC = "CSE_BBC";
     final String username_BBC1 = "CSE_BBC1";
-    final String password_BBC  = "aio_YWqQ75LLnzE66cGrbMWNhCka1Xhb";
-    final String password_BBC1 = "aio_byWm36bA6XUDSqPfCfVboXjt3Uf1";
+    final String password_BBC  = "";
+    final String password_BBC1 = "";
 
 
 //    final String username = "_MyStic_";
-//    final String password = "aio_mIEU65n3PYMldvC0mMJ8EpSDvc86";
+//    final String password = "";
 
 
     final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
