@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
 
         //----------------------------------------------------------------------//
 
-        final TextView txt = (TextView)root.findViewById(R.id.txt);
+        final TextView txtHomeMain = (TextView)root.findViewById(R.id.txtHomeMain);
 
 
         mqttService = new MQTTService(getContext());
@@ -126,13 +126,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (btnTurnOnClick.getText().toString().equals("TURN ON")) {
+//                    txtHomeMain.setText("Fan is ON");
                     btnTurnOnClick.setText("TURN OFF");
-//                    txt.setText("Fan is turn off");
                     sendDataMQTT(createTurnOnFanJSON("1").toString(), turnOnFanTopic);
                 }
                 else {
+//                    txtHomeMain.setText("Fan is OFF");
                     btnTurnOnClick.setText("TURN ON");
-//                    txt.setText("Fan is turn on");
                     sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
                 }
             }
@@ -187,18 +187,18 @@ public class HomeFragment extends Fragment {
 
 
     private void processGasTracker(String data) {
-        final TextView txt = (TextView)root.findViewById(R.id.txt);
+        final TextView txtHomeMain = (TextView)root.findViewById(R.id.txtHomeMain);
 
         if(Integer.parseInt(data)  == 0) {
             btnTurnOnClick.setText("TURN OFF");
-            txt.setTextColor(root.getResources().getColor(R.color.colorGreen));
-            txt.setText("Nồng độ bình thường");
+            txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorGreen));
+            txtHomeMain.setText("Nồng độ bình thường");
             sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
         }
         else {
             btnTurnOnClick.setText("TURN ON");
-            txt.setTextColor(root.getResources().getColor(R.color.colorRed));
-            txt.setText("Nồng độ vượt ngưỡng");
+            txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorRed));
+            txtHomeMain.setText("Nồng độ vượt ngưỡng");
             sendDataMQTT(createTurnOnFanJSON("1").toString(), turnOnFanTopic);
         }
     }
