@@ -30,18 +30,32 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-
-    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
-    final String turnOnFanTopic = "_MyStic_/feeds/turn-on-fan";
-
-//    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
-//    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
-
-
+    final String serverURI ="tcp://io.adafruit.com:1883";
+    final String clientID ="asdasdsass";
+    final String username_BBC = "CSE_BBC";
+    final String username_BBC1 = "CSE_BBC1";
+    final String password_BBC  = "aio_YWqQ75LLnzE66cGrbMWNhCka1Xhb";
+    final String password_BBC1 = "aio_byWm36bA6XUDSqPfCfVboXjt3Uf1";
 
 
 
-    MQTTService mqttService;
+//    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
+//    final String turnOnFanTopic = "_MyStic_/feeds/turn-on-fan";
+
+    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
+    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
+
+
+
+
+
+
+
+
+
+
+
+    MQTTService mqttServiceBBC, mqttServiceBBC1;
     View root;
     Button btnTurnOnClick, btnLogout;
 
@@ -86,11 +100,50 @@ public class HomeFragment extends Fragment {
         final TextView txtHomeMain = (TextView)root.findViewById(R.id.txtHomeMain);
 
 
-        mqttService = new MQTTService(getContext());
-        mqttService.setCallback(new MqttCallbackExtended() {
+        mqttServiceBBC = new MQTTService(getContext(), username_BBC, password_BBC);
+        mqttServiceBBC1 = new MQTTService(getContext(), username_BBC1, password_BBC1);
+
+
+        mqttServiceBBC.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
-                Log.d("mqtt", "Connect Complete");
+                Log.d("mqttBBC", "Connect Complete");
+                try {
+                    mqttServiceBBC.mqttAndroidClient.subscribe(turnOnFanTopic,0);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
+
+
+
+        mqttServiceBBC1.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                Log.d("mqttBBC1", "Connect Complete");
+                try {
+                    mqttServiceBBC1.mqttAndroidClient.subscribe(gasDetectionTopic,0);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -122,18 +175,22 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+
+
+
         btnTurnOnClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (btnTurnOnClick.getText().toString().equals("TURN ON")) {
 //                    txtHomeMain.setText("Fan is ON");
                     btnTurnOnClick.setText("TURN OFF");
-                    sendDataMQTT(createTurnOnFanJSON("1").toString(), turnOnFanTopic);
+                    sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("200").toString(), turnOnFanTopic);
                 }
                 else {
 //                    txtHomeMain.setText("Fan is OFF");
                     btnTurnOnClick.setText("TURN ON");
-                    sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
+                    sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("0").toString(), turnOnFanTopic);
                 }
             }
         });
@@ -143,7 +200,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void sendDataMQTT(@org.jetbrains.annotations.NotNull String data, String topic) {
+    private void sendDataMQTT( MQTTService mqttService, @org.jetbrains.annotations.NotNull String data, String topic) {
         MqttMessage message = new MqttMessage();
         message.setId(1234);
         message.setQos(0);
@@ -181,7 +238,7 @@ public class HomeFragment extends Fragment {
 
 
     private JSONObject createTurnOnFanJSON(String data) {
-        return createJSON("11", "RELAY", data, "");
+        return createJSON("10", "DRV_PWM", data, "");
     }
 
 
@@ -190,16 +247,16 @@ public class HomeFragment extends Fragment {
         final TextView txtHomeMain = (TextView)root.findViewById(R.id.txtHomeMain);
 
         if(Integer.parseInt(data)  == 0) {
-            btnTurnOnClick.setText("TURN OFF");
+            btnTurnOnClick.setText("TURN ON");
             txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorGreen));
             txtHomeMain.setText("Nồng độ bình thường");
-            sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
+//            sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
         }
         else {
-            btnTurnOnClick.setText("TURN ON");
+            btnTurnOnClick.setText("TURN OFF");
             txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorRed));
             txtHomeMain.setText("Nồng độ vượt ngưỡng");
-            sendDataMQTT(createTurnOnFanJSON("1").toString(), turnOnFanTopic);
+            sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("200").toString(), turnOnFanTopic);
         }
     }
 
