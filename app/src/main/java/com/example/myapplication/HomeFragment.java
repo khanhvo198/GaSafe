@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -59,41 +61,40 @@ public class HomeFragment extends Fragment {
     MQTTService mqttServiceBBC, mqttServiceBBC1;
     View root;
     Button btnTurnOnClick, btnLogout;
+    LineChart chart;
+
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.home_fragment, container, false);
         btnTurnOnClick = root.findViewById(R.id.btnFanController);
 
-        LineChart chart = (LineChart) root.findViewById(R.id.chart);
+        chart = (LineChart) root.findViewById(R.id.chart);
 
-
-        ArrayList<Entry> myValues = new ArrayList<Entry>();
-        myValues.add(new Entry(0,1.2f));
-        myValues.add(new Entry(1, 23.1f));
-        myValues.add(new Entry(2, 12.4f));
-        myValues.add(new Entry(3,1.2f));
-        myValues.add(new Entry(4,9f));
-        myValues.add(new Entry(5,12f));
-        myValues.add(new Entry(6,11.2f));
-        myValues.add(new Entry(7,15.6f));
-        myValues.add(new Entry(8,22.4f));
-
-
-        LineDataSet dataSet = new LineDataSet(myValues, "This is sample chart"); // add entries to dataset
-
-        
-        LineData lineData = new LineData(dataSet);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setDrawFilled(true);
-//        dataSet.setFillColor(ContextCompat.getColor(context,R.color.green));
-
-        chart.setData(lineData);
-        chart.invalidate();
-
-
-
+        LineData data = new LineData();
+        chart.setData(data);
+//        myValues.add(new Entry(0,1.2f));
+//        myValues.add(new Entry(1, 23.1f));
+//        myValues.add(new Entry(2, 12.4f));
+//        myValues.add(new Entry(3,1.2f));
+//        myValues.add(new Entry(4,9f));
+//        myValues.add(new Entry(5,12f));
+//        myValues.add(new Entry(6,11.2f));
+//        myValues.add(new Entry(7,15.6f));
+//        myValues.add(new Entry(8,22.4f));
+//
+//        ArrayList<Entry> myValues = new ArrayList<Entry>();
+//        LineDataSet dataSet = new LineDataSet(myValues, "Simple temperature chart"); // add entries to dataset
+//        LineData lineData = new LineData(dataSet);
+//
+//
+//        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//        dataSet.setDrawFilled(true);
+////        dataSet.setFillColor(ContextCompat.getColor(context,R.color.green));
+//
+//        chart.setData(lineData);
+//        chart.invalidate();
 
 
         //----------------------------------------------------------------------//
@@ -111,7 +112,7 @@ public class HomeFragment extends Fragment {
                 Log.d("mqttBBC", "Connect Complete");
                 try {
                     mqttServiceBBC.mqttAndroidClient.subscribe(turnOnFanTopic,0);
-//                    mqttServiceBBC.mqttAndroidClient.subscribe(tempHumidTopic, 0);
+                    mqttServiceBBC.mqttAndroidClient.subscribe(tempHumidTopic, 0);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -130,7 +131,11 @@ public class HomeFragment extends Fragment {
                 switch (topic) {
                     case tempHumidTopic: {
                         Log.d("Temp-humid data:" , (String) data.get("data"));
+                        int temperature = Integer.parseInt(data.get("data").toString().split("-")[0]);
+                        processTempHumidTracker(temperature);
+
                         break;
+
                     }
 
                     default: {
@@ -211,6 +216,44 @@ public class HomeFragment extends Fragment {
         return root;
 
     }
+
+
+
+    private void processTempHumidTracker(int data) {
+        LineData chartData = chart.getData();
+
+        if(chartData != null) {
+            ILineDataSet set = chartData.getDataSetByIndex(0);
+
+            if (set == null) {
+                set = createSet();
+                chartData.addDataSet(set);
+            }
+
+            chartData.addEntry(new Entry(set.getEntryCount(), data), 0);
+            chartData.notifyDataChanged();
+            chart.notifyDataSetChanged();
+            chart.setVisibleXRangeMaximum(120);
+            chart.moveViewToX(set.getEntryCount());
+            chart.setData(chartData);
+            chart.invalidate();
+
+        }
+
+    }
+
+
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, "Biểu đồ nhiệt độ theo thời gian");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set.setDrawFilled(true);
+
+
+        return set;
+
+    }
+
 
 
     private void sendDataMQTT( MQTTService mqttService, @org.jetbrains.annotations.NotNull String data, String topic) {
