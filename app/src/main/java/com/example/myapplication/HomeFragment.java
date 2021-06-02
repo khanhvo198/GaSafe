@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import com.google.gson.Gson;
-import org.json.simple.JSONObject;
 
 import android.Manifest;
 import android.content.Intent;
