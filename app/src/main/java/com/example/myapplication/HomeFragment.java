@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
 
     MQTTService mqttServiceBBC, mqttServiceBBC1;
     View root;
-    Button btnTurnOnClick, btnLogout;
+    Button btnFanController, btnLogout;
     LineChart chart;
 
 
@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.home_fragment, container, false);
-        btnTurnOnClick = root.findViewById(R.id.btnFanController);
+        btnFanController = root.findViewById(R.id.btnFanController);
 
         chart = (LineChart) root.findViewById(R.id.chart);
 
@@ -197,17 +197,17 @@ public class HomeFragment extends Fragment {
 
 
 
-        btnTurnOnClick.setOnClickListener(new View.OnClickListener() {
+        btnFanController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btnTurnOnClick.getText().toString().equals("TURN ON")) {
+                if (btnFanController.getText().toString().equals("TURN ON")) {
 //                    txtHomeMain.setText("Fan is ON");
-                    btnTurnOnClick.setText("TURN OFF");
+                    btnFanController.setText("TURN OFF");
                     sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("200").toString(), turnOnFanTopic);
                 }
                 else {
 //                    txtHomeMain.setText("Fan is OFF");
-                    btnTurnOnClick.setText("TURN ON");
+                    btnFanController.setText("TURN ON");
                     sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("0").toString(), turnOnFanTopic);
                 }
             }
@@ -303,13 +303,13 @@ public class HomeFragment extends Fragment {
         final TextView txtHomeMain = (TextView)root.findViewById(R.id.txtHomeMain);
 
         if(Integer.parseInt(data)  == 0) {
-            btnTurnOnClick.setText("TURN ON");
+            btnFanController.setText("TURN ON");
             txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorGreen));
             txtHomeMain.setText("Nồng độ bình thường");
 //            sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
         }
         else {
-            btnTurnOnClick.setText("TURN OFF");
+            btnFanController.setText("TURN OFF");
             txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorRed));
             txtHomeMain.setText("Nồng độ vượt ngưỡng");
             sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("200").toString(), turnOnFanTopic);
