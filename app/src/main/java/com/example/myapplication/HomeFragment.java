@@ -2,7 +2,10 @@ package com.example.myapplication;
 
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -23,15 +27,20 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+    private static final int REQUEST_CALL = 1;
     final String serverURI ="tcp://io.adafruit.com:1883";
     final String clientID ="asdasdsass";
     final String username_BBC = "CSE_BBC";
@@ -60,7 +69,7 @@ public class HomeFragment extends Fragment {
 
     MQTTService mqttServiceBBC, mqttServiceBBC1;
     View root;
-    Button btnFanController, btnLogout;
+    Button btnFanController, btnCallFireFighter, btnLogout;
     LineChart chart;
 
 
@@ -69,6 +78,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.home_fragment, container, false);
         btnFanController = root.findViewById(R.id.btnFanController);
+        btnCallFireFighter = root.findViewById(R.id.btnCallFireFighter);
 
         chart = (LineChart) root.findViewById(R.id.chart);
 
@@ -213,6 +223,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnCallFireFighter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callFireFighter();
+            }
+        });
+
         return root;
 
     }
@@ -317,6 +334,25 @@ public class HomeFragment extends Fragment {
     }
 
 
+    private void makeCall(String number) {
+        if (number.trim().length() > 0) {
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        REQUEST_CALL
+                );
+            } else {
+                String dial = "tel:" + number;
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(dial));
+                startActivity(intent);
+            }
+        }
+    }
 
-
+    private void callFireFighter() {
+        String phoneNumFireFighter = "115";
+        makeCall(phoneNumFireFighter);
+    }
 }
