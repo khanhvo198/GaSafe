@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
 
     MQTTService mqttServiceBBC, mqttServiceBBC1;
     View root;
-    Button btnFanController, btnCallFireFighter, btnLogout;
+    Button btnFanController, btnCallFireFighter, btnContactSupport, btnLogout;
     LineChart chart;
 
 
@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment {
         root = inflater.inflate(R.layout.home_fragment, container, false);
         btnFanController = root.findViewById(R.id.btnFanController);
         btnCallFireFighter = root.findViewById(R.id.btnCallFireFighter);
+        btnContactSupport = root.findViewById(R.id.btnContactSupport);
 
         chart = (LineChart) root.findViewById(R.id.chart);
 
@@ -230,6 +231,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnContactSupport.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callSupport();
+            }
+        }));
+
         return root;
 
     }
@@ -354,5 +362,10 @@ public class HomeFragment extends Fragment {
     private void callFireFighter() {
         String phoneNumFireFighter = "115";
         makeCall(phoneNumFireFighter);
+    }
+
+    private void callSupport() {
+        String phoneNumSupport = "*101#";
+        makeCall(phoneNumSupport);
     }
 }
