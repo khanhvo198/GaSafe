@@ -5,4 +5,14 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorGreen">#00cc00</color>
+    <color name="colorBrownDark">#494949</color>
+    <color name="colorEggBlue">#03DAC5</color>
+    <color name="colorEggBlue_Darker">#02c4b1</color>
+    <color name="colorMecury">#E5E5E5</color>
+    <color name="colorMecury_Darker">#cecece</color>
+    <color name="colorKindaRed">#C83636</color>
+    <color name="colorKindaRed_Darker">#b33030</color>
+    <color name="colorKindaPurple">#855CF8</color>
+    <color name="colorKindaPurple_Darker">#6c3bf6</color>
+
 </resources>

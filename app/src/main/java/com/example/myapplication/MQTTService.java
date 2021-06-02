@@ -19,14 +19,32 @@ public class MQTTService {
 
     final String serverURI ="tcp://io.adafruit.com:1883";
     final String clientID ="asdasdsass";
-    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
-    final String username ="duyctin2000";
-    final String password ="aio_aQin02myvFFSpNnioTB6T2kLUA0w";
+//    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
+    final String username_BBC = "CSE_BBC";
+    final String username_BBC1 = "CSE_BBC1";
+    final String password_BBC  = "";
+    final String password_BBC1 = "";
+
+
+//    final String username = "_MyStic_";
+//    final String password = "";
+
+
+    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
+    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
+    final String buzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
+
+
+
+
+//    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
+//    final String DRVTopic = "_MyStic_/feeds/turn-on-fan";
+//    final String buzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
 
 
     public MqttAndroidClient mqttAndroidClient;
 
-    public MQTTService(Context context) {
+    public MQTTService(Context context, String username, String password) {
         mqttAndroidClient = new MqttAndroidClient(context, serverURI, clientID);
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
@@ -50,7 +68,15 @@ public class MQTTService {
 
             }
         });
-        connect();
+        connect(username, password);
+//        connect(username, password,buzzerTopic);
+//        connect(username_BBC1, password_BBC1);
+
+        //-----------------------------------------------------------------
+//        subscriptionTopic(gasDetectionTopic);
+//        subscriptionTopic(turnOnFanTopic);
+
+
     }
 
     public void setCallback(MqttCallbackExtended callback) {
@@ -58,7 +84,7 @@ public class MQTTService {
     }
 
 
-    private void connect() {
+    private void connect(String username, String password) {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
         mqttConnectOptions.setCleanSession(false);
@@ -75,7 +101,7 @@ public class MQTTService {
                     disconnectedBufferOptions.setPersistBuffer(false);
                     disconnectedBufferOptions.setDeleteOldestMessages(false);
                     mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                    subscriptionTopic();
+//                    subscriptionTopic(subscriptionTopic);
                 }
 
                 @Override
@@ -91,12 +117,12 @@ public class MQTTService {
     }
 
 
-    private void subscriptionTopic() {
+    public void subscriptionTopic(String subscriptionTopic) {
         try {
             mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.w("mqtt", "Subscribed!");
+                    Log.w("mqtt", "Subscribed!" + subscriptionTopic);
 
                 }
 
