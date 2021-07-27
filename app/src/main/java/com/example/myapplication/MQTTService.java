@@ -19,7 +19,7 @@ public class MQTTService {
 
     final String serverURI ="tcp://io.adafruit.com:1883";
     final String clientID ="asdasdsass";
-//    final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
+    //final String subscriptionTopic ="duyctin2000/feeds/gas-detection";
     final String username_BBC = "CSE_BBC";
     final String username_BBC1 = "CSE_BBC1";
     final String password_BBC  = "";

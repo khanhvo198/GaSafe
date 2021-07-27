@@ -41,7 +41,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
     private static final int REQUEST_CALL = 1;
     final String serverURI ="tcp://io.adafruit.com:1883";
-    final String clientID ="asdasdsass";
+    final String clientID ="asdasdsasss";
     final String username_BBC = "CSE_BBC";
     final String username_BBC1 = "CSE_BBC1";
     final String password_BBC  = "";
@@ -82,29 +82,30 @@ public class HomeFragment extends Fragment {
 
         chart = (LineChart) root.findViewById(R.id.chart);
 
-        LineData data = new LineData();
-        chart.setData(data);
-//        myValues.add(new Entry(0,1.2f));
-//        myValues.add(new Entry(1, 23.1f));
-//        myValues.add(new Entry(2, 12.4f));
-//        myValues.add(new Entry(3,1.2f));
-//        myValues.add(new Entry(4,9f));
-//        myValues.add(new Entry(5,12f));
-//        myValues.add(new Entry(6,11.2f));
-//        myValues.add(new Entry(7,15.6f));
-//        myValues.add(new Entry(8,22.4f));
-//
-//        ArrayList<Entry> myValues = new ArrayList<Entry>();
-//        LineDataSet dataSet = new LineDataSet(myValues, "Simple temperature chart"); // add entries to dataset
-//        LineData lineData = new LineData(dataSet);
-//
-//
-//        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//        dataSet.setDrawFilled(true);
-////        dataSet.setFillColor(ContextCompat.getColor(context,R.color.green));
-//
-//        chart.setData(lineData);
-//        chart.invalidate();
+        //LineData data = new LineData();
+        //chart.setData(data);
+        ArrayList<Entry> myValues = new ArrayList<Entry>();
+        myValues.add(new Entry(0,1.2f));
+        myValues.add(new Entry(1, 23.1f));
+        myValues.add(new Entry(2, 12.4f));
+        myValues.add(new Entry(3,1.2f));
+        myValues.add(new Entry(4,9f));
+        myValues.add(new Entry(5,12f));
+        myValues.add(new Entry(6,11.2f));
+        myValues.add(new Entry(7,15.6f));
+        myValues.add(new Entry(8,22.4f));
+
+        //ArrayList<Entry> myValues = new ArrayList<Entry>();
+        LineDataSet dataSet = new LineDataSet(myValues, "Simple temperature chart"); // add entries to dataset
+        LineData lineData = new LineData(dataSet);
+
+
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataSet.setDrawFilled(true);
+//        dataSet.setFillColor(ContextCompat.getColor(context,R.color.green));
+
+        chart.setData(lineData);
+        chart.invalidate();
 
 
         //----------------------------------------------------------------------//
