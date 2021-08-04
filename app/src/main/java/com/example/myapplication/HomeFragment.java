@@ -48,14 +48,22 @@ public class HomeFragment extends Fragment {
     final String password_BBC1 = "";
 
 
+//    final String username_BBC = "_MyStic_";
+//    final String username_BBC1 = "_MyStic_";
+//    final String password_BBC  = "";
+//    final String password_BBC1 = "";
+
+
 
 //    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
 //    final String turnOnFanTopic = "_MyStic_/feeds/turn-on-fan";
+//    final String tempHumidTopic = "_MyStic_/feeds/temp-humid-tracker";
+//    final String turnOnBuzzerTopic = "_MyStic_/feeds/turn-on-buzzer";
 
     final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
     final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
     final String tempHumidTopic = "CSE_BBC/feeds/bk-iot-temp-humid";
-
+    final String turnOnBuzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
 
 
 
@@ -123,6 +131,7 @@ public class HomeFragment extends Fragment {
                 try {
                     mqttServiceBBC.mqttAndroidClient.subscribe(turnOnFanTopic,0);
                     mqttServiceBBC.mqttAndroidClient.subscribe(tempHumidTopic, 0);
+                    mqttServiceBBC.mqttAndroidClient.subscribe(turnOnBuzzerTopic,0);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -291,7 +300,7 @@ public class HomeFragment extends Fragment {
 
 
         message.setPayload(b);
-        Log.d("ABC", "Publish" + message);
+        Log.d("ABC", "Publish" + message + topic);
 
         try {
             mqttService.mqttAndroidClient.publish(topic, message);
@@ -321,6 +330,10 @@ public class HomeFragment extends Fragment {
         return createJSON("10", "DRV_PWM", data, "");
     }
 
+    private JSONObject createTurnOnBuzzerJSON(String data) {
+        return createJSON("2","SPEAKER", data, "");
+    }
+
 
 
     private void processGasTracker(String data) {
@@ -331,12 +344,14 @@ public class HomeFragment extends Fragment {
             txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorGreen));
             txtHomeMain.setText("Nồng độ bình thường");
 //            sendDataMQTT(createTurnOnFanJSON("0").toString(), turnOnFanTopic);
+            sendDataMQTT(mqttServiceBBC,createTurnOnBuzzerJSON("0").toString(),turnOnBuzzerTopic);
         }
         else {
             btnFanController.setText("TURN OFF");
             txtHomeMain.setTextColor(root.getResources().getColor(R.color.colorRed));
             txtHomeMain.setText("Nồng độ vượt ngưỡng");
             sendDataMQTT(mqttServiceBBC, createTurnOnFanJSON("200").toString(), turnOnFanTopic);
+            sendDataMQTT(mqttServiceBBC, createTurnOnBuzzerJSON("1000").toString(),turnOnBuzzerTopic);
         }
     }
 
