@@ -29,6 +29,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -42,28 +43,28 @@ public class HomeFragment extends Fragment {
     private static final int REQUEST_CALL = 1;
     final String serverURI ="tcp://io.adafruit.com:1883";
     final String clientID ="asdasdsass";
-    final String username_BBC = "CSE_BBC";
-    final String username_BBC1 = "CSE_BBC1";
-    final String password_BBC  = "";
-    final String password_BBC1 = "";
-
-
-//    final String username_BBC = "_MyStic_";
-//    final String username_BBC1 = "_MyStic_";
+//    final String username_BBC = "CSE_BBC";
+//    final String username_BBC1 = "CSE_BBC1";
 //    final String password_BBC  = "";
 //    final String password_BBC1 = "";
 
 
+    final String username_BBC = "_MyStic_";
+    final String username_BBC1 = "_MyStic_";
+    final String password_BBC  = "aio_xMVA72t0iK51AyN6WhowlVlAbKKL";
+    final String password_BBC1 = "aio_xMVA72t0iK51AyN6WhowlVlAbKKL";
 
-//    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
-//    final String turnOnFanTopic = "_MyStic_/feeds/turn-on-fan";
-//    final String tempHumidTopic = "_MyStic_/feeds/temp-humid-tracker";
-//    final String turnOnBuzzerTopic = "_MyStic_/feeds/turn-on-buzzer";
 
-    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
-    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
-    final String tempHumidTopic = "CSE_BBC/feeds/bk-iot-temp-humid";
-    final String turnOnBuzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
+
+    final String gasDetectionTopic = "_MyStic_/feeds/gas-tracker";
+    final String turnOnFanTopic = "_MyStic_/feeds/turn-on-fan";
+    final String tempHumidTopic = "_MyStic_/feeds/temp-humid-tracker";
+    final String turnOnBuzzerTopic = "_MyStic_/feeds/turn-on-buzzer";
+
+//    final String gasDetectionTopic = "CSE_BBC1/feeds/bk-iot-gas";
+//    final String turnOnFanTopic = "CSE_BBC/feeds/bk-iot-drv";
+//    final String tempHumidTopic = "CSE_BBC/feeds/bk-iot-temp-humid";
+//    final String turnOnBuzzerTopic = "CSE_BBC/feeds/bk-iot-speaker";
 
 
 
@@ -91,7 +92,15 @@ public class HomeFragment extends Fragment {
         chart = (LineChart) root.findViewById(R.id.chart);
 
         LineData data = new LineData();
+//        chartData.addEntry(new Entry(set.getEntryCount(), data), 0);
+        ILineDataSet set = createSet();
+        data.addDataSet(set);
+        data.addEntry(new Entry(set.getEntryCount(),25), 0);
+        data.addEntry(new Entry(set.getEntryCount(),26),0);
+        data.addEntry(new Entry(set.getEntryCount(),24),0);
+
         chart.setData(data);
+
 //        myValues.add(new Entry(0,1.2f));
 //        myValues.add(new Entry(1, 23.1f));
 //        myValues.add(new Entry(2, 12.4f));
@@ -118,7 +127,7 @@ public class HomeFragment extends Fragment {
         //----------------------------------------------------------------------//
 
         final TextView txtHomeMain = (TextView)root.findViewById(R.id.txtHomeMain);
-
+        txtHomeMain.setText("Welcome to GaSafe");
 
         mqttServiceBBC = new MQTTService(getContext(), username_BBC, password_BBC);
         mqttServiceBBC1 = new MQTTService(getContext(), username_BBC1, password_BBC1);
@@ -374,7 +383,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void callFireFighter() {
-        String phoneNumFireFighter = "115";
+        String phoneNumFireFighter = "114";
         makeCall(phoneNumFireFighter);
     }
 
